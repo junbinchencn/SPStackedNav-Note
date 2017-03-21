@@ -42,7 +42,7 @@ static BOOL IsIPad11() {
 @synthesize vcContainer = _vcContainer;
 @synthesize screenshot = _screenshot;
 @synthesize markedForSuperviewRemoval = _markedForSuperviewRemoval;
-@synthesize needsInitialPresentation = _needsInitialPresentation;//是否需要初始头像
+@synthesize needsInitialPresentation = _needsInitialPresentation;//是否需要初始图像
 @synthesize overlayOpacity = _overlayOpacity;
 
 - (id)initWithFrame:(CGRect)frame VC:(UIViewController*)vc

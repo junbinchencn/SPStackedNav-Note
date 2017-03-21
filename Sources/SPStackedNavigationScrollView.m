@@ -143,7 +143,7 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     }
     return nil;
 }
-//手势结束
+//手势结束之后，View要滚动
 //边滚动边捕捉
 - (void)scrollAndSnapWithVelocity:(float)vel animated:(BOOL)animated
 {
@@ -249,6 +249,7 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     }
 }
 
+// 控制RunLoop循环
 - (void)startRunLoop
 {
     if (!_runningRunLoop)
@@ -277,10 +278,11 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     _runningRunLoop = NO;
 }
 
-- (void)snapToClosest
-{
-    [self scrollAndSnapWithVelocity:0 animated:NO];
-}
+//这个方法没被调用
+//- (void)snapToClosest
+//{
+//    [self scrollAndSnapWithVelocity:0 animated:NO];
+//}
 
 - (UIPanGestureRecognizer *)panGestureRecognizer { return self.scrollRec; }
 
@@ -475,7 +477,7 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
 }
 
 #pragma mark Visibility
-//控制PC的可见性
+//控制 pageC 的可见性
 - (void)updateContainerVisibilityByShowing:(BOOL)doShow byHiding:(BOOL)doHide
 {
     //fabsf 浮点数的绝对值
@@ -506,33 +508,45 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
         // 该 pageC 被做了 POP 操作，需要被 SuperView移除
         if (pageC.markedForSuperviewRemoval)
             currentPen = markedForSuperviewRemovalOffset;
-        //从右边离屏
-
+        // 该分屏是否是在屏幕可见的分屏的右边同时无法看见该分屏
         BOOL isOffScreenToTheRight = currentPen >= self.bounds.size.width;
-//        NSLog(@"isOffScreenToTheRight --%@",isOffScreenToTheRight == YES ? @"YES" : @"NO");
+
         NSRange scrollRange = [self scrollRangeForPageContainer:pageC];
-        //覆盖效果
+        // View是否被其他View覆盖了
         BOOL isCovered = currentPen + scrollRange.length <= 0;
-        //是否可见
+        
+        //View现在是否可见
         BOOL isVisible = !isOffScreenToTheRight && !isCovered;
+        
+
         // pageC的可见性发生变化 && （ (isVisible == NO  && doHide == Yes)  ||  isVisible == Yes && doShow ==Yes）
+        // 只要pageC的可见性发生变化，不管是隐藏还是显示都执行下面的if条件分支
         if (pageC.VCVisible != isVisible && ((!isVisible && doHide) || (isVisible && doShow)))
         {
+            
+            // pageC分屏将出现
+            // pageC分屏将离开屏幕
             //(isVisible == No || bouncing == No || (isVisible ==Yes && needsInitialPresentation == Yes))
             if (!isVisible || !bouncing || (isVisible && pageC.needsInitialPresentation)) {
                 pageC.needsInitialPresentation = NO;
                 pageC.VCVisible = isVisible;
             }
         }
+        // 要隐藏 pageC 并且该 pageC 被标记为销毁的
         //(doHide ==Yes && pageC.markedForSuperviewRemoval ==Yes)
+        // 将 pageC 加入销毁数组 viewsToDelete
         if (doHide && pageC.markedForSuperviewRemoval)
             [viewsToDelete addObject:pageC];
+        
+        //经过 Demo 验证 pen 和 markedForSuperviewRemovalOffset 的值一样
         markedForSuperviewRemovalOffset += pageC.frame.size.width;
+        
         // markedForSuperviewRemoval = No
+        // 计算 pen 的值，该值为下一个分屏的 X 坐标
         if (!pageC.markedForSuperviewRemoval)
             pen += pageC.frame.size.width;
     }
-    
+    // 对viewsToDelete数组里面的View执行销毁操作
     [viewsToDelete makeObjectsPerformSelector:@selector(removeFromSuperview)];
 }
 
