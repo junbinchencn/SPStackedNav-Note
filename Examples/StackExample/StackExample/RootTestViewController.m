@@ -25,7 +25,7 @@
     if (!(self = [super init]))
         return nil;
     
-    self.view.backgroundColor = [UIColor redColor];
+//    self.view.backgroundColor = [UIColor redColor];
     return self;
 }
 

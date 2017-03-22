@@ -32,24 +32,26 @@
 
     root1.tabBarItem.image = [UIImage imageNamed:@"114-balloon"];
     
-//    RootTestViewController *root2 = [RootTestViewController new];
-//    root2.title = @"Root 2";
-//    root2.tabBarItem.image = [UIImage imageNamed:@"185-printer"];
-//    root2.tabBarItem.badgeValue = @"5";
-//    root2.tabBarItem.badgeColor = [UIColor redColor];
-//
-//    RootTestViewController *root3 = [RootTestViewController new];
-//    root3.title = @"Root 3";
-//    root3.tabBarItem.image = [UIImage imageNamed:@"114-balloon"];
+    RootTestViewController *root2 = [RootTestViewController new];
+    root2.title = @"Root 2";
+    root2.tabBarItem.image = [UIImage imageNamed:@"185-printer"];
+    root2.tabBarItem.badgeValue = @"5";
+    root2.tabBarItem.badgeColor = [UIColor redColor];
+
+    RootTestViewController *root3 = [RootTestViewController new];
+    root3.title = @"Root 3";
+    root3.tabBarItem.image = [UIImage imageNamed:@"114-balloon"];
 
     self.tabs.viewControllers = @[
-        [[SPStackedNavigationController alloc] initWithRootViewController:root1]
-//        [[SPStackedNavigationController alloc] initWithRootViewController:root2]
-//        [[SPStackedNavigationController alloc] initWithRootViewController:root3]
+        [[SPStackedNavigationController alloc] initWithRootViewController:root1],
+        [[SPStackedNavigationController alloc] initWithRootViewController:root2],
+        [[SPStackedNavigationController alloc] initWithRootViewController:root3]
     ];
-//    self.tabs.additionalItems = [NSArray arrayWithObject:root3.tabBarItem];
+
     self.window.rootViewController = self.tabs;
     [self.window makeKeyAndVisible];
+    
+    
     return YES;
 }
 

@@ -44,7 +44,6 @@
 		05A4D2C8163C3E2900309444 /* 114-balloon.png in Resources */ = {isa = PBXBuildFile; fileRef = 05A4D2C6163C3E2900309444 /* 114-balloon.png */; };
 		05A4D2C9163C3E2900309444 /* 185-printer.png in Resources */ = {isa = PBXBuildFile; fileRef = 05A4D2C7163C3E2900309444 /* 185-printer.png */; };
 		05BD7D1E18CF8DBE00A990C9 /* SPFunctional-mini.m in Sources */ = {isa = PBXBuildFile; fileRef = 05BD7D1D18CF8DBE00A990C9 /* SPFunctional-mini.m */; };
-		B82534DA1E73A75200957105 /* Xtrace.mm in Sources */ = {isa = PBXBuildFile; fileRef = B82534D91E73A75200957105 /* Xtrace.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -102,8 +101,6 @@
 		05A4D2C7163C3E2900309444 /* 185-printer.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "185-printer.png"; path = "icons-from-glyphish/185-printer.png"; sourceTree = SOURCE_ROOT; };
 		05BD7D1C18CF8DBE00A990C9 /* SPFunctional-mini.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "SPFunctional-mini.h"; sourceTree = "<group>"; };
 		05BD7D1D18CF8DBE00A990C9 /* SPFunctional-mini.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "SPFunctional-mini.m"; sourceTree = "<group>"; };
-		B82534D81E73A75200957105 /* Xtrace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Xtrace.h; sourceTree = "<group>"; };
-		B82534D91E73A75200957105 /* Xtrace.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Xtrace.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,8 +150,6 @@
 		05A4D24D163C2F4000309444 /* StackExample */ = {
 			isa = PBXGroup;
 			children = (
-				B82534D81E73A75200957105 /* Xtrace.h */,
-				B82534D91E73A75200957105 /* Xtrace.mm */,
 				05A4D256163C2F4000309444 /* SPAppDelegate.h */,
 				05A4D257163C2F4000309444 /* SPAppDelegate.m */,
 				05A4D2C6163C3E2900309444 /* 114-balloon.png */,
@@ -357,7 +352,6 @@
 				05A4D298163C2F8600309444 /* SPStackedPageContainer.m in Sources */,
 				05A4D299163C2F8600309444 /* UIImage+SPTabBarImage.m in Sources */,
 				05A4D2A0163C306C00309444 /* SPSideTabBar.m in Sources */,
-				B82534DA1E73A75200957105 /* Xtrace.mm in Sources */,
 				05A4D2A4163C31C900309444 /* RootTestViewController.m in Sources */,
 				05A4D2A9163C330300309444 /* ChildTestViewController.m in Sources */,
 			);

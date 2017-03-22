@@ -44,16 +44,5 @@
 {
     return [[UIDevice currentDevice] userInterfaceIdiom] == UIUserInterfaceIdiomPad ? kStackedPageHalfSize : kStackedPageFullSize;
 }
-- (IBAction)jumpToAppleStore:(id)sender {
-    [self.stackedNavigationController pushViewController:[ChildTestViewController new] onTopOf:self animated:YES];
-    self.stackedNavigationController.tabBarItem.badgeValue = [NSString stringWithFormat:@"%ld", self.stackedNavigationController.viewControllers.count];
-}
-
-- (void)productViewControllerDidFinish:(SKStoreProductViewController *)viewController{
-    NSLog(@"用户请求页面弹回");
-    [self dismissViewControllerAnimated:YES completion:^{
-        NSLog(@"页面弹回完成");
-    }];
-}
 
 @end
