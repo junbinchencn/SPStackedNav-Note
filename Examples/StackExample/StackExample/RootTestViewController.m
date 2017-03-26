@@ -37,7 +37,7 @@
 - (IBAction)test:(id)sender
 {
     ChildTestViewController *vc = [ChildTestViewController new];
-    [self.stackedNavigationController pushViewController:vc onTopOf:self animated:YES];
+    [self.stackedNavigationController pushViewController:vc animated:YES];
 }
 
 @end

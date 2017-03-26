@@ -53,10 +53,9 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
 //理解 ContentOffSet
 //模仿UIScrollView
 @implementation SPStackedNavigationScrollView {
-    //在UIScrollView滚动视图中，用户滚动时，滚动的是内容视图，
-    //而contentOffset坐标，就是内容视图的坐标。
-    CGPoint _actualOffset; //模拟ScrollView当前的contentOffset
-    CGPoint _targetOffset;// 将要滚动到的contentOffset，ScrollView的bound为第一页全屏的bound，在只有第一屏全屏的时候contentOffset为 0
+    //在 UIScrollView 滚动视图中，用户滚动时，滚动的是内容视图，
+    CGPoint _actualOffset; //模拟 ScrollView 当前的 contentOffset
+    CGPoint _targetOffset;// 将要滚动到的 contentOffset
     CGPoint _scrollAtStartOfPan;
     CGFloat _scrollDoneMargin;
     BOOL    _runningRunLoop;
@@ -143,8 +142,7 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     }
     return nil;
 }
-//手势结束之后，View要滚动
-//边滚动边捕捉
+//手势结束之后，View要滚动,这个方法在View边滚动的时候边调用
 - (void)scrollAndSnapWithVelocity:(float)vel animated:(BOOL)animated
 {
     // this is ugly, but we need to ensure that all views are loaded correctly to calculate left/right containers
@@ -348,7 +346,7 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     // TODO<nevyn>: Block processing
 }
 
-//ScrollView滚动到指定位置
+//模仿 ScrollView 滚动到指定位置
 - (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated
 {
     _targetOffset = contentOffset;
@@ -369,23 +367,24 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
 
 - (void)layoutSubviews
 {
-    // pen 的作用是stretch scroll at start and end 用于在第一屏从左向右拉扯和最后一屏从右向左拉扯，
+    // pen 的作用是stretch scroll at start and end
+    // 用于在第一屏从左向右拉扯和最后一屏从右向左拉扯，
     // 让手势拖动的距离2倍于View移动的距离。
     // _actualOffset 改变之后，通过特定的规则计算 pen 的 frame,然后将 frame 赋值给 View ，
     // 总之作用就是调整 View 的 frame 位置
     // 可以说 pen 就是对应的每个分屏的 frame
     CGRect pen = CGRectZero;
-    //
-//    NSLog(@"_actualOffset.x--->%@",NSStringFromCGPoint(_actualOffset));
+
     // 为什么需要 -  _actualOffset.x ？
-    // 为了得到每个分屏相对于显示屏幕上View的bound的坐标原点的 X 值
-    // 详见ContentOffset的计算方法
+    // 为了得到每个分屏 View 的坐标的 X 值 （坐标原点是 SPStackedNavigationScrollView 的坐标原点，即在屏幕范围内的最左边的分屏 View 的左上角位置）
+    // 详见 ContentOffset 的计算方法
     pen.origin.x = -_actualOffset.x;
     
     // stretch scroll at start and end
     if (_actualOffset.x < 0){
-        //第一页从左向右拉扯 _actualOffset.x < 0 才成立，_actualOffset就是当前ScrollView的contentOffset
-        //手势拖动的距离2倍于View移动的距离
+        // 第一页从左向右拉扯 _actualOffset.x < 0 才成立，
+        // _actualOffset 就是当前模仿的 UIScrollView 的 contentOffset
+        // 手势拖动的距离2倍于 View 移动的距离
         pen.origin.x = -_actualOffset.x/2;
     }
 
@@ -395,11 +394,11 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     }
 
     int i = 0;
-    // markedForSuperviewRemovalOffset标记 pageC 自己的 offset 坐标
-    // 用来给superview把pageC从当前位置移动到 markedForSuperviewRemovalOffset 指定的坐标
-    // 可以让自己的View对边缘层叠效果做出对应的位置
-    // 也可以让pageC自己全屏或者半屏,
-    CGFloat markedForSuperviewRemovalOffset = pen.origin.x;//View的坐标位置x
+    // markedForSuperviewRemovalOffset 标记 pageC 自己的 offset 坐标
+    // 用来给 superview 把 pageC 从当前位置移动到 markedForSuperviewRemovalOffset 指定的坐标
+    // 可以让自己的 View 对边缘层叠效果做出对应的位置
+    // 也可以让 pageC 自己全屏或者半屏,
+    CGFloat markedForSuperviewRemovalOffset = pen.origin.x;// View 的坐标位置x
     NSMutableArray *stackedViews = [NSMutableArray array];
     
     for(SPStackedPageContainer *pageC in self.subviews) {
@@ -415,20 +414,18 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
         // 小于 （0，1，2，3）*3
         // 左边是一个 stackedViews，最多有3层边缘层叠效果
         if (actualPen.origin.x < (MIN(i, 3))*3){
-           // 如果actualPen.origin.x 小于 (MIN(i, 3))*3 那么说明该pageC的位置不是在stackedViews最顶部的三个以内
+           // 如果actualPen.origin.x 小于 (MIN(i, 3))*3 那么说明该 pageC 的位置不是在 stackedViews 最顶部的三个以内
            [stackedViews addObject:pageC];
         }else{
            pageC.hidden = NO;
         }
 
         if (self.scrollAnimationTimer == nil)
-            //floorf取整操作
+            // floorf取整操作
             actualPen.origin.x = floorf(actualPen.origin.x);
-        //改变pageC.frame，那么pageC就会动了
-        //
-
+        // 改变pageC.frame，那么pageC就会动了
         pageC.frame = actualPen;
-//        NSLog(@"pageC.frame---->%@",NSStringFromCGRect(pageC.frame));
+        // NSLog(@"pageC.frame---->%@",NSStringFromCGRect(pageC.frame));
         // pageC.frame---->{{-1416, 0}, {944, 768}} 第一屏 全屏
         // pageC.frame---->{{-472, 0}, {472, 768}}  第二屏 半屏
         // pageC.frame---->{{0, 0}, {472, 768}} 第三屏 半屏 显示在左边
@@ -441,9 +438,9 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
         if (!pageC.markedForSuperviewRemoval)
             pen.origin.x += pen.size.width;
         
-        //覆盖不透明度
+        // 覆盖不透明度
         if (actualPen.origin.x <= 0 && pageC != [self.subviews lastObject]) {
-            //abs()绝对值函数
+            // abs()绝对值函数
             pageC.overlayOpacity = 0.3/actualPen.size.width*abs(actualPen.origin.x);
         } else {
             pageC.overlayOpacity = 0.0;
@@ -456,16 +453,16 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
     for (NSInteger index = 0; index < [stackedViews count]; index++)
     {
         SPStackedPageContainer *pageC = stackedViews[index];
-        //stackedViews 包括RootVC的View;
-        //stackedViews 里面的最后3个View显示
+        // stackedViews 包括 RootVC 的 View;
+        // stackedViews 里面的最后3个 View 显示
         if ([stackedViews count] > 3 && index < ([stackedViews count]-3))
             pageC.hidden = YES;
         else
         {
-            //左边是一个 stackedViews，最多有3层边缘层叠效果
+            // 左边是一个 stackedViews，最多有3层边缘层叠效果
             pageC.hidden = NO;
             CGRect frame = pageC.frame;
-            //调整坐标，显示层叠效果
+            // 调整坐标，显示层叠效果
             frame.origin.x = 0 + MIN(i, 3)*3;
             pageC.frame = frame;
             i++;
@@ -480,16 +477,14 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
 //控制 pageC 的可见性
 - (void)updateContainerVisibilityByShowing:(BOOL)doShow byHiding:(BOOL)doHide
 {
-    //fabsf 浮点数的绝对值
-    // 是否需要弹跳效果
+    // fabsf 浮点数的绝对值
+    // 分屏 View 是否需要弹跳效果
     BOOL bouncing = self.scrollAnimationTimer && fabsf(_targetOffset.x - _actualOffset.x) < 30;
     
     // layoutSubViews的 pen 是一个 frame、
     // 这里的 pen 是一个 frame 的 x 坐标
-    // 但是用法和layoutSubViews的 pen 没什么区别
+    // 但是用法和 layoutSubViews 的 pen 没什么区别
     CGFloat pen = -_actualOffset.x;
-    
-//    NSLog(@"-_actualOffset.x-->%f",-_actualOffset.x);
     
     // stretch scroll at start and end
     if (_actualOffset.x < 0)
@@ -499,7 +494,7 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
 
     if (_actualOffset.x > maxScroll)
         pen = -(maxScroll + (_actualOffset.x-maxScroll)/2);
-    //用来让SuperView 移动 pageC 的 x 坐标，原点是屏幕显示的最左边的分屏的 X 坐标
+    // 用来让 SuperView 移动 pageC 的 x 坐标，原点是屏幕显示的最左边的分屏的 X 坐标
     CGFloat markedForSuperviewRemovalOffset = pen;
     
     NSMutableArray *viewsToDelete = [NSMutableArray array];
@@ -512,15 +507,15 @@ static const CGFloat kPanScrollViewDeceleratingCaptureAngle = ((40.f) / 180.f * 
         BOOL isOffScreenToTheRight = currentPen >= self.bounds.size.width;
 
         NSRange scrollRange = [self scrollRangeForPageContainer:pageC];
-        // View是否被其他View覆盖了
+        // View 是否被其他 View 覆盖了
         BOOL isCovered = currentPen + scrollRange.length <= 0;
         
-        //View现在是否可见
+        // View 现在是否可见
         BOOL isVisible = !isOffScreenToTheRight && !isCovered;
         
 
-        // pageC的可见性发生变化 && （ (isVisible == NO  && doHide == Yes)  ||  isVisible == Yes && doShow ==Yes）
-        // 只要pageC的可见性发生变化，不管是隐藏还是显示都执行下面的if条件分支
+        // pageC 的可见性发生变化 && （ (isVisible == NO  && doHide == Yes)  ||  isVisible == Yes && doShow ==Yes）
+        // 只要 pageC 的可见性发生变化，不管是隐藏还是显示都执行下面的if条件分支
         if (pageC.VCVisible != isVisible && ((!isVisible && doHide) || (isVisible && doShow)))
         {
             

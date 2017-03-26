@@ -151,16 +151,15 @@ static BOOL IsIPad11() {
         if (!self.markedForSuperviewRemoval || [_vc isViewLoaded])
         {
             _vcContainer.backgroundColor = _vc.view.backgroundColor;
-//            _vcContainer.backgroundColor = [UIColor redColor];
             _vc.view.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
             if (!_vc.view.superview)
+                //添加 View
                 [_vcContainer insertSubview:_vc.view atIndex:0];
         }
     } else {
-        //self.screenshot = [[[UIImageView alloc] initWithImage:_vc.view.sp_screenshot] autorelease];
         if ([_vc isViewLoaded])
+            // 移除 View
             [_vc.view removeFromSuperview];
-        //[_vcContainer insertSubview:_screenshot atIndex:0];
     }
 }
 - (BOOL)VCVisible

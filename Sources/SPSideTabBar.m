@@ -1,3 +1,4 @@
+
 // Copyright 2014 Spotify
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -147,6 +148,7 @@
 //将 UITabBarItem 数组 转成 SPSideTabItemButton 数组
 - (void)setItems:(NSArray*)items
 {
+    
     if ([items isEqual:_items]) return;
     
     self.selectedItem = nil;

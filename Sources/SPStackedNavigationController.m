@@ -77,6 +77,7 @@ static const float kUnknownFrameSize = 10;
                         size.width);
     
     SPStackedPageContainer *pageC = [[SPStackedPageContainer alloc] initWithFrame:frame VC:viewController];
+    //SPStackedNavigationScrollView 添加一个 SPStackedPageContainer 子 View
     [_scroll addSubview:pageC];
 }
 
@@ -140,11 +141,12 @@ static const float kUnknownFrameSize = 10;
     
     if ([self isViewLoaded])
     {
+        // 将 SPStackedPageContainer 标记为移除状态，后续 SPStackedNavigationScrollView 会将它移除
         SPStackedPageContainer *pageC = [_scroll containerForViewController:viewController];
         pageC.markedForSuperviewRemoval = YES;
     }
     
-    
+    // 移除 viewController
     [viewController removeFromParentViewController];
     [self didChangeValueForKey:@"viewControllers"];
     
